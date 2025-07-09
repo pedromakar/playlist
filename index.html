@@ -1,177 +1,788 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de Playlists</title>
-
-    <!-- Link para o Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FocusMate - Gerenciador de Tarefas</title>
     <style>
-        /* Customização dos Cards e elementos */
-        .playlist-card {
+        /* Reset básico */
+        * {
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #FAFAFA;
+            color: #2C3E50;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* === PÁGINA MENU === */
+        #menuPage {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            background: #FFFFFF;
+            padding: 0 20px;
+            text-align: center;
+            min-height: 100vh;
+            box-shadow: inset 0 0 50px #E5E9F0;
+        }
+
+        #menuPage h1 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #34495E;
+            user-select: text;
+        }
+
+        .menu-button {
+            background: #3498DB;
+            border: none;
             border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
+            padding: 18px 48px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            width: 260px;
+            max-width: 90vw;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 15px rgba(52, 152, 219, 0.3);
+            user-select: none;
         }
 
-        .playlist-card img {
+        .menu-button:hover,
+        .menu-button:focus {
+            background: #2980B9;
+            box-shadow: 0 12px 20px rgba(41, 128, 185, 0.5);
+            outline: none;
+        }
+
+        /* === ÁREA DO APP === */
+        #app {
+            flex: 1;
+            display: none;
+            padding: 36px 48px;
+            overflow-y: auto;
+            background: #FFFFFF;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.07);
+            border-radius: 16px;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        /* Botão voltar */
+        #btnBackToMenu {
+            background: transparent;
+            color: #3498DB;
+            border: 2px solid #3498DB;
+            border-radius: 12px;
+            padding: 10px 22px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 40px;
+            transition: background 0.3s ease, color 0.3s ease;
+            user-select: none;
+        }
+
+        #btnBackToMenu:hover,
+        #btnBackToMenu:focus {
+            background: #3498DB;
+            color: white;
+            outline: none;
+        }
+
+        /* --- CALENDÁRIO --- */
+        #calendarView {
+            display: none;
+        }
+
+        #calendarView h2 {
+            text-align: center;
+            margin-bottom: 28px;
+            font-weight: 700;
+            color: #34495E;
+            font-size: 2rem;
+            user-select: text;
+        }
+
+        /* Seletor de mês/ano */
+        #monthYearSelector {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            user-select: none;
+        }
+
+        #monthYearSelector select {
+            font-size: 1rem;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #D1D8E0;
+            background: white;
+            color: #34495E;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        #monthYearSelector select:focus {
+            border-color: #3498DB;
+            outline: none;
+        }
+
+        table.calendar-table {
             width: 100%;
-            height: auto;
-            border-radius: 5px;
+            border-collapse: separate;
+            border-spacing: 6px;
+            user-select: none;
         }
 
-        .playlist-card h5 {
-            font-size: 18px;
-            margin-top: 10px;
+        table.calendar-table thead th {
+            padding: 12px 0;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #7F8C8D;
+            text-transform: uppercase;
+            border-bottom: 1px solid #E5E9F0;
         }
 
-        .playlist-card p {
-            font-size: 14px;
-            color: #777;
+        table.calendar-table td {
+            background: #F8F9FB;
+            border-radius: 10px;
+            padding: 16px 12px;
+            text-align: right;
+            vertical-align: top;
+            font-weight: 600;
+            color: #34495E;
+            cursor: pointer;
+            transition: background-color 0.25s ease;
+            position: relative;
         }
 
-        .playlist-input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        table.calendar-table td:hover:not(.inactive):not(.today) {
+            background: #E1EBFF;
+        }
+
+        table.calendar-table td.inactive {
+            color: #BDC3C7;
+            cursor: default;
+            background: transparent;
+        }
+
+        table.calendar-table td.today {
+            background: #3498DB;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        .task-indicator {
+            width: 8px;
+            height: 8px;
+            background: #2980B9;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            box-shadow: 0 0 6px #2980B9cc;
+        }
+
+        /* --- TAREFAS DO DIA --- */
+        #dayView {
+            display: none;
+        }
+
+        #dayView h2 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            margin-bottom: 12px;
+            user-select: text;
+            color: #34495E;
+        }
+
+        #taskCount {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #6C7A89;
+            user-select: none;
+        }
+
+        #taskInputGroup {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        #taskInputGroup input[type="text"] {
+            flex-grow: 1;
+            padding: 14px 18px;
+            font-size: 1rem;
+            border-radius: 12px;
+            border: 1.5px solid #D1D8E0;
+            outline-color: #3498DB;
+            transition: border-color 0.3s ease;
+            user-select: text;
+            color: #34495E;
+        }
+
+        #taskInputGroup input[type="text"]:focus {
+            border-color: #3498DB;
+        }
+
+        #categorySelect {
+            width: 160px;
+            border-radius: 12px;
+            padding: 14px 12px;
+            border: 1.5px solid #D1D8E0;
+            background: white;
+            font-size: 1rem;
+            cursor: pointer;
+            outline-color: #3498DB;
+            transition: border-color 0.3s ease;
+            user-select: none;
+            color: #34495E;
+        }
+
+        #categorySelect:focus {
+            border-color: #3498DB;
+        }
+
+        #addTaskBtn {
+            background: #3498DB;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            user-select: none;
+        }
+
+        #addTaskBtn:hover,
+        #addTaskBtn:focus {
+            background: #2980B9;
+            outline: none;
+        }
+
+        #tasksList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            user-select: none;
+            max-height: 350px;
+            overflow-y: auto;
+            border-top: 1px solid #E5E9F0;
+        }
+
+        #tasksList li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 10px;
+            border-bottom: 1px solid #E5E9F0;
+            user-select: none;
+        }
+
+        #tasksList li label {
+            flex-grow: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+            color: #34495E;
+            font-weight: 600;
+        }
+
+        #tasksList li label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        #tasksList li label span.task-text.completed {
+            text-decoration: line-through;
+            color: #95A5A6;
+            user-select: none;
+        }
+
+        /* Categorias coloridas */
+        .category-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            color: white;
+            text-transform: capitalize;
+            user-select: none;
+            user-drag: none;
+            user-select: none;
+        }
+
+        .category-trabalho {
+            background: #2980B9;
+        }
+
+        .category-saude {
+            background: #27AE60;
+        }
+
+        .category-academia {
+            background: #8E44AD;
+        }
+
+        .category-compras {
+            background: #C0392B;
+        }
+
+        /* --- TAREFAS DA SEMANA --- */
+        #weekView {
+            display: none;
+        }
+
+        #weekView h2 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            margin-bottom: 30px;
+            user-select: text;
+            color: #34495E;
+            text-align: center;
+        }
+
+        #weekTasksList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            user-select: none;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        #weekTasksList li {
+            background: #F4F7FA;
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            font-size: 1rem;
+            color: #34495E;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-weight: 600;
+        }
+
+        #weekTasksList li .category-label {
+            margin-left: 12px;
+            font-size: 0.75rem;
         }
     </style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <header class="text-center mb-4">
-            <h1>Gerenciador de Playlists</h1>
-            <p class="lead">Crie e organize suas playlists facilmente</p>
-        </header>
+    <!-- PÁGINA MENU -->
+    <section id="menuPage" role="main" aria-label="Menu principal">
+        <h1>FocusMate</h1>
+        <button class="menu-button" id="btnShowCalendar" aria-label="Ver Calendário">Ver Calendário</button>
+        <button class="menu-button" id="btnTodayTasks" aria-label="Tarefas do Dia">Tarefas do Dia</button>
+        <button class="menu-button" id="btnWeekTasks" aria-label="Tarefas da Semana">Tarefas da Semana</button>
+    </section>
 
-        <!-- Formulário de Adicionar Música -->
-        <div class="mb-4">
-            <h4>Adicionar Música ou Playlist</h4>
-            <input type="text" class="form-control playlist-input" id="musicUrl"
-                placeholder="Cole o link da música ou playlist">
-            <button class="btn btn-success mt-3" id="addMusicBtn">Adicionar à Playlist</button>
-        </div>
+    <!-- ÁREA DO APP -->
+    <section id="app" role="main" aria-label="Área principal do aplicativo">
+        <button id="btnBackToMenu" aria-label="Voltar ao Menu">← Voltar ao Menu</button>
 
-        <!-- Seção para exibir a Playlist -->
-        <h4>Playlist Atual</h4>
-        <div class="row" id="playlistContainer"></div>
-    </div>
-
-    <!-- Modal para Exibir Detalhes da Música -->
-    <div class="modal fade" id="musicModal" tabindex="-1" aria-labelledby="musicModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="musicModalLabel">Detalhes da Música</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img id="musicImage" src="" alt="Album" class="img-fluid mb-3">
-                    <h5 id="musicTitle"></h5>
-                    <p id="musicArtist"></p>
-                    <p id="musicAlbum"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                </div>
+        <!-- Calendário -->
+        <div id="calendarView">
+            <h2>Calendário</h2>
+            <div id="monthYearSelector" aria-label="Selecionar mês e ano">
+                <select id="monthSelect" aria-label="Selecionar mês"></select>
+                <select id="yearSelect" aria-label="Selecionar ano"></select>
             </div>
+            <table class="calendar-table" role="grid" aria-label="Calendário mensal">
+                <thead>
+                    <tr>
+                        <th scope="col">Dom</th>
+                        <th scope="col">Seg</th>
+                        <th scope="col">Ter</th>
+                        <th scope="col">Qua</th>
+                        <th scope="col">Qui</th>
+                        <th scope="col">Sex</th>
+                        <th scope="col">Sáb</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody"></tbody>
+            </table>
         </div>
-    </div>
 
-    <!-- Scripts do Bootstrap e JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Tarefas do dia -->
+        <div id="dayView">
+            <h2 id="dayTitle">Tarefas do Dia</h2>
+            <div id="taskCount">0 tarefas</div>
+            <div id="taskInputGroup">
+                <input type="text" id="taskInput" placeholder="Nova tarefa..." autocomplete="off"
+                    aria-label="Nova tarefa" />
+                <select id="categorySelect" aria-label="Selecione categoria">
+                    <option value="trabalho" selected>Trabalho</option>
+                    <option value="saude">Saúde</option>
+                    <option value="academia">Academia</option>
+                    <option value="compras">Compras</option>
+                </select>
+                <button id="addTaskBtn" aria-label="Adicionar tarefa">Adicionar</button>
+            </div>
+            <ul id="tasksList"></ul>
+        </div>
+
+        <!-- Tarefas da semana -->
+        <div id="weekView">
+            <h2>Tarefas da Semana</h2>
+            <ul id="weekTasksList"></ul>
+        </div>
+    </section>
+
     <script>
-        // Lista para armazenar músicas da playlist
-        const playlist = [];
+        // Dados principais
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || {};
+        let selectedDate = new Date();
 
-        // Função para buscar as informações da música via URL (Aqui simulando uma música genérica)
-        function fetchMusicInfo(url) {
-            // Para fins de simulação, usamos um conjunto de dados estáticos. Uma integração com APIs como a do Spotify poderia ser usada.
-            const fakeMusicData = {
-                "https://spotify.com/track/1": {
-                    title: "Shape of You",
-                    artist: "Ed Sheeran",
-                    album: "÷",
-                    imageUrl: "https://i.scdn.co/image/ab67616d0000b27335d285e57670b9e4d5901f83"
-                },
-                "https://spotify.com/track/2": {
-                    title: "Blinding Lights",
-                    artist: "The Weeknd",
-                    album: "After Hours",
-                    imageUrl: "https://i.scdn.co/image/ab67616d0000b273d4a1b6cdbf21315a1a48de9d"
-                },
-                // Adicione mais URLs e músicas simuladas aqui...
-            };
+        // Elementos DOM
+        const menuPage = document.getElementById('menuPage');
+        const app = document.getElementById('app');
 
-            return fakeMusicData[url];
+        const btnShowCalendar = document.getElementById('btnShowCalendar');
+        const btnTodayTasks = document.getElementById('btnTodayTasks');
+        const btnWeekTasks = document.getElementById('btnWeekTasks');
+        const btnBackToMenu = document.getElementById('btnBackToMenu');
+
+        const calendarView = document.getElementById('calendarView');
+        const dayView = document.getElementById('dayView');
+        const weekView = document.getElementById('weekView');
+
+        const calendarBody = document.getElementById('calendarBody');
+
+        const dayTitle = document.getElementById('dayTitle');
+        const taskCount = document.getElementById('taskCount');
+        const taskInput = document.getElementById('taskInput');
+        const categorySelect = document.getElementById('categorySelect');
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        const tasksList = document.getElementById('tasksList');
+        const weekTasksList = document.getElementById('weekTasksList');
+
+        const monthSelect = document.getElementById('monthSelect');
+        const yearSelect = document.getElementById('yearSelect');
+
+        // --- FUNÇÕES DE NAVEGAÇÃO ---
+        function showMenu() {
+            menuPage.style.display = 'flex';
+            app.style.display = 'none';
+            hideAllAppViews();
         }
 
-        // Função para adicionar uma música à playlist
-        function addMusicToPlaylist() {
-            const url = document.getElementById('musicUrl').value.trim();
-
-            if (url === "") {
-                alert("Por favor, insira um link válido!");
-                return;
-            }
-
-            const musicInfo = fetchMusicInfo(url);
-
-            if (!musicInfo) {
-                alert("Não conseguimos encontrar essa música. Tente novamente!");
-                return;
-            }
-
-            // Adiciona à playlist
-            playlist.push(musicInfo);
-
-            // Exibe a playlist
-            displayPlaylist();
+        function showAppView(view) {
+            menuPage.style.display = 'none';
+            app.style.display = 'block';
+            hideAllAppViews();
+            view.style.display = 'block';
         }
 
-        // Função para exibir a playlist
-        function displayPlaylist() {
-            const container = document.getElementById('playlistContainer');
-            container.innerHTML = '';
+        function hideAllAppViews() {
+            calendarView.style.display = 'none';
+            dayView.style.display = 'none';
+            weekView.style.display = 'none';
+        }
 
-            playlist.forEach((music, index) => {
-                const musicCard = document.createElement('div');
-                musicCard.classList.add('col-md-4', 'mb-4');
-                musicCard.classList.add('playlist-card');
-                musicCard.innerHTML = `
-                    <div class="card">
-                        <img src="${music.imageUrl}" class="card-img-top" alt="${music.title}">
-                        <div class="card-body">
-                            <h5 class="card-title">${music.title}</h5>
-                            <p class="card-text">${music.artist} - ${music.album}</p>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#musicModal" onclick="showMusicDetails(${index})">
-                                Ver Detalhes
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(musicCard);
+        btnBackToMenu.addEventListener('click', () => {
+            showMenu();
+        });
+
+        btnShowCalendar.addEventListener('click', () => {
+            selectedDate = new Date();
+            updateMonthYearSelectors(selectedDate);
+            showAppView(calendarView);
+            renderCalendar(selectedDate);
+        });
+
+        btnTodayTasks.addEventListener('click', () => {
+            selectedDate = new Date();
+            showAppView(dayView);
+            updateDayView();
+        });
+
+        btnWeekTasks.addEventListener('click', () => {
+            showAppView(weekView);
+            renderWeekTasks();
+        });
+
+        // --- RENDERIZAR SELECTS DE MÊS E ANO ---
+        function updateMonthYearSelectors(date) {
+            const currentYear = new Date().getFullYear();
+
+            // Preencher meses
+            const monthNames = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril',
+                'Maio', 'Junho', 'Julho', 'Agosto',
+                'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            ];
+
+            if (monthSelect.options.length === 0) {
+                monthNames.forEach((name, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = name;
+                    monthSelect.appendChild(option);
+                });
+            }
+            monthSelect.value = date.getMonth();
+
+            // Preencher anos (5 anos antes e depois do atual)
+            if (yearSelect.options.length === 0) {
+                for (let y = currentYear - 5; y <= currentYear + 5; y++) {
+                    const option = document.createElement('option');
+                    option.value = y;
+                    option.textContent = y;
+                    yearSelect.appendChild(option);
+                }
+            }
+            yearSelect.value = date.getFullYear();
+        }
+
+        // Atualizar calendário ao mudar seleção
+        monthSelect.addEventListener('change', () => {
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            selectedDate = new Date(year, month, 1);
+            renderCalendar(selectedDate);
+        });
+
+        yearSelect.addEventListener('change', () => {
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            selectedDate = new Date(year, month, 1);
+            renderCalendar(selectedDate);
+        });
+
+        // --- RENDERIZAR CALENDÁRIO ---
+        function renderCalendar(date) {
+            calendarBody.innerHTML = '';
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            // Primeiro dia do mês (índice do dia da semana)
+            const firstDay = new Date(year, month, 1).getDay();
+
+            // Número de dias no mês
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Contador de dias
+            let dayCounter = 1;
+
+            // Criar linhas da tabela para as semanas (máximo 6)
+            for (let week = 0; week < 6; week++) {
+                const tr = document.createElement('tr');
+                let emptyWeek = true;
+
+                // Criar colunas para cada dia da semana
+                for (let day = 0; day < 7; day++) {
+                    const td = document.createElement('td');
+
+                    // Preencher células antes do primeiro dia do mês e depois do último dia
+                    if (week === 0 && day < firstDay) {
+                        td.classList.add('inactive');
+                        td.textContent = '';
+                    } else if (dayCounter > daysInMonth) {
+                        td.classList.add('inactive');
+                        td.textContent = '';
+                    } else {
+                        emptyWeek = false;
+                        td.textContent = dayCounter;
+
+                        // Destacar o dia atual
+                        const today = new Date();
+                        if (
+                            dayCounter === today.getDate() &&
+                            month === today.getMonth() &&
+                            year === today.getFullYear()
+                        ) {
+                            td.classList.add('today');
+                        }
+
+                        // Ao clicar, seleciona o dia e abre a view de tarefas do dia
+                        td.style.cursor = 'pointer';
+                        td.addEventListener('click', () => {
+                            selectedDate = new Date(year, month, dayCounter);
+                            showAppView(dayView);
+                            updateDayView();
+                        });
+
+                        dayCounter++;
+                    }
+
+                    tr.appendChild(td);
+                }
+
+                if (emptyWeek) break; // Para evitar semanas vazias
+                calendarBody.appendChild(tr);
+            }
+        }
+
+        // --- FORMATAÇÃO DE DATAS ---
+        function formatDateISO(date) {
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function formatDateBR(date) {
+            return date.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
             });
         }
 
-        // Função para exibir os detalhes da música no modal
-        function showMusicDetails(index) {
-            const music = playlist[index];
+        // --- ATUALIZAR VIEW DO DIA ---
+        function updateDayView() {
+            dayTitle.textContent = `Tarefas de ${formatDateBR(selectedDate)}`;
 
-            document.getElementById('musicTitle').textContent = music.title;
-            document.getElementById('musicArtist').textContent = `Artista: ${music.artist}`;
-            document.getElementById('musicAlbum').textContent = `Álbum: ${music.album}`;
-            document.getElementById('musicImage').src = music.imageUrl;
+            const dateKey = formatDateISO(selectedDate);
+            const dayTasks = tasks[dateKey] || [];
+
+            taskCount.textContent = `${dayTasks.length} tarefa${dayTasks.length !== 1 ? 's' : ''}`;
+
+            tasksList.innerHTML = '';
+            dayTasks.forEach((task, index) => {
+                const li = document.createElement('li');
+
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed || false;
+                checkbox.addEventListener('change', () => {
+                    task.completed = checkbox.checked;
+                    saveTasks();
+                    updateDayView();
+                });
+
+                const span = document.createElement('span');
+                span.textContent = task.text;
+                span.className = 'task-text';
+                if (task.completed) {
+                    span.classList.add('completed');
+                }
+
+                const categoryLabel = document.createElement('span');
+                categoryLabel.className = `category-label category-${task.category}`;
+                categoryLabel.textContent = task.category;
+
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                label.appendChild(categoryLabel);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = '✕';
+                deleteBtn.style.background = 'transparent';
+                deleteBtn.style.border = 'none';
+                deleteBtn.style.color = '#c0392b';
+                deleteBtn.style.fontWeight = '700';
+                deleteBtn.style.cursor = 'pointer';
+                deleteBtn.title = 'Excluir tarefa';
+                deleteBtn.addEventListener('click', () => {
+                    dayTasks.splice(index, 1);
+                    saveTasks();
+                    updateDayView();
+                });
+
+                li.appendChild(label);
+                li.appendChild(deleteBtn);
+                tasksList.appendChild(li);
+            });
         }
 
-        // Evento para adicionar música quando o botão for clicado
-        document.getElementById('addMusicBtn').addEventListener('click', addMusicToPlaylist);
+        // --- ADICIONAR TAREFA ---
+        addTaskBtn.addEventListener('click', () => {
+            const text = taskInput.value.trim();
+            const category = categorySelect.value;
+            if (!text) return alert('Por favor, digite uma tarefa.');
+
+            const dateKey = formatDateISO(selectedDate);
+            if (!tasks[dateKey]) tasks[dateKey] = [];
+
+            tasks[dateKey].push({
+                text,
+                category,
+                completed: false,
+            });
+
+            saveTasks();
+            taskInput.value = '';
+            updateDayView();
+        });
+
+        // --- SALVAR TAREFAS NO LOCALSTORAGE ---
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        // --- TAREFAS DA SEMANA ---
+        function renderWeekTasks() {
+            weekTasksList.innerHTML = '';
+
+            const now = new Date();
+            const startOfWeek = new Date(now);
+            // Ajustar para domingo anterior
+            startOfWeek.setDate(now.getDate() - now.getDay());
+
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(startOfWeek);
+                day.setDate(startOfWeek.getDate() + i);
+                const dateKey = formatDateISO(day);
+                const dayTasks = tasks[dateKey] || [];
+
+                dayTasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.textContent = `${formatDateBR(day)} - ${task.text}`;
+
+                    const categoryLabel = document.createElement('span');
+                    categoryLabel.className = `category-label category-${task.category}`;
+                    categoryLabel.textContent = task.category;
+
+                    li.appendChild(categoryLabel);
+                    weekTasksList.appendChild(li);
+                });
+            }
+
+            if (weekTasksList.children.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'Nenhuma tarefa para esta semana.';
+                li.style.color = '#7F8C8D';
+                li.style.fontStyle = 'italic';
+                weekTasksList.appendChild(li);
+            }
+        }
+
+        // --- INICIALIZAÇÃO ---
+        showMenu();
     </script>
 </body>
 
