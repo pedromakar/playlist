@@ -23,9 +23,120 @@
             flex-direction: column;
             overflow: hidden;
             user-select: none;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* === PÁGINA MENU === */
+        /* === MODO ESCURO === */
+        body.dark-mode {
+            background: #121214;
+            color: #E1E1E6;
+        }
+
+        body.dark-mode #menuPage {
+            background: #1C1C1E;
+            box-shadow: inset 0 0 50px #00000088;
+        }
+
+        body.dark-mode .menu-button {
+            background: #3B82F6;
+            box-shadow: 0 8px 15px #1E40AF88;
+            color: #E1E1E6;
+        }
+
+        body.dark-mode .menu-button:hover,
+        body.dark-mode .menu-button:focus {
+            background: #2563EB;
+            box-shadow: 0 12px 20px #1E40AFcc;
+            outline: none;
+        }
+
+        body.dark-mode #app {
+            background: #1C1C1E;
+            box-shadow: 0 0 25px #00000099;
+            color: #E1E1E6;
+        }
+
+        body.dark-mode #btnBackToMenu {
+            background: transparent;
+            color: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        body.dark-mode #btnBackToMenu:hover,
+        body.dark-mode #btnBackToMenu:focus {
+            background: #3B82F6;
+            color: #E1E1E6;
+            outline: none;
+        }
+
+        body.dark-mode #calendarView h2,
+        body.dark-mode #dayView h2,
+        body.dark-mode #weekView h2,
+        body.dark-mode #menuPage h1 {
+            color: #E1E1E6;
+        }
+
+        body.dark-mode #monthYearSelector select {
+            background: #121214;
+            color: #E1E1E6;
+            border-color: #3B82F6;
+        }
+
+        body.dark-mode #monthYearSelector select:focus {
+            border-color: #2563EB;
+        }
+
+        body.dark-mode table.calendar-table td {
+            background: #29292E;
+            color: #E1E1E6;
+        }
+
+        body.dark-mode table.calendar-table td.inactive {
+            color: #636366;
+            background: transparent;
+        }
+
+        body.dark-mode table.calendar-table td.today {
+            background: #3B82F6;
+            box-shadow: 0 0 8px #3B82F6aa;
+            color: white;
+        }
+
+        body.dark-mode #taskInputGroup input[type="text"],
+        body.dark-mode #categorySelect {
+            background: #29292E;
+            color: #E1E1E6;
+            border-color: #3B82F6;
+        }
+
+        body.dark-mode #taskInputGroup input[type="text"]:focus,
+        body.dark-mode #categorySelect:focus {
+            border-color: #2563EB;
+        }
+
+        body.dark-mode #addTaskBtn {
+            background: #3B82F6;
+            color: #E1E1E6;
+        }
+
+        body.dark-mode #addTaskBtn:hover,
+        body.dark-mode #addTaskBtn:focus {
+            background: #2563EB;
+            outline: none;
+        }
+
+        body.dark-mode #tasksList li {
+            background: #29292E;
+            color: #E1E1E6;
+            border-color: #3B82F6;
+        }
+
+        body.dark-mode #weekTasksList li {
+            background: #29292E;
+            color: #E1E1E6;
+        }
+
+        /* Reset básico menu e app */
         #menuPage {
             flex: 1;
             display: flex;
@@ -38,6 +149,7 @@
             text-align: center;
             min-height: 100vh;
             box-shadow: inset 0 0 50px #E5E9F0;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         #menuPage h1 {
@@ -47,6 +159,7 @@
             letter-spacing: 3px;
             color: #34495E;
             user-select: text;
+            transition: color 0.3s ease;
         }
 
         .menu-button {
@@ -60,7 +173,7 @@
             cursor: pointer;
             width: 260px;
             max-width: 90vw;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
             box-shadow: 0 8px 15px rgba(52, 152, 219, 0.3);
             user-select: none;
         }
@@ -72,7 +185,6 @@
             outline: none;
         }
 
-        /* === ÁREA DO APP === */
         #app {
             flex: 1;
             display: none;
@@ -83,9 +195,9 @@
             border-radius: 16px;
             max-width: 900px;
             margin: 30px auto;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* Botão voltar */
         #btnBackToMenu {
             background: transparent;
             color: #3498DB;
@@ -96,7 +208,7 @@
             font-size: 1rem;
             cursor: pointer;
             margin-bottom: 40px;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
             user-select: none;
         }
 
@@ -119,9 +231,9 @@
             color: #34495E;
             font-size: 2rem;
             user-select: text;
+            transition: color 0.3s ease;
         }
 
-        /* Seletor de mês/ano */
         #monthYearSelector {
             display: flex;
             justify-content: center;
@@ -160,6 +272,7 @@
             color: #7F8C8D;
             text-transform: uppercase;
             border-bottom: 1px solid #E5E9F0;
+            transition: color 0.3s ease;
         }
 
         table.calendar-table td {
@@ -171,7 +284,7 @@
             font-weight: 600;
             color: #34495E;
             cursor: pointer;
-            transition: background-color 0.25s ease;
+            transition: background-color 0.25s ease, color 0.3s ease;
             position: relative;
         }
 
@@ -214,6 +327,7 @@
             margin-bottom: 12px;
             user-select: text;
             color: #34495E;
+            transition: color 0.3s ease;
         }
 
         #taskCount {
@@ -221,6 +335,7 @@
             margin-bottom: 20px;
             color: #6C7A89;
             user-select: none;
+            transition: color 0.3s ease;
         }
 
         #taskInputGroup {
@@ -237,9 +352,10 @@
             border-radius: 12px;
             border: 1.5px solid #D1D8E0;
             outline-color: #3498DB;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
             user-select: text;
             color: #34495E;
+            background: white;
         }
 
         #taskInputGroup input[type="text"]:focus {
@@ -255,7 +371,7 @@
             font-size: 1rem;
             cursor: pointer;
             outline-color: #3498DB;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
             user-select: none;
             color: #34495E;
         }
@@ -290,6 +406,7 @@
             max-height: 350px;
             overflow-y: auto;
             border-top: 1px solid #E5E9F0;
+            transition: border-color 0.3s ease;
         }
 
         #tasksList li {
@@ -299,6 +416,7 @@
             padding: 14px 10px;
             border-bottom: 1px solid #E5E9F0;
             user-select: none;
+            transition: border-color 0.3s ease;
         }
 
         #tasksList li label {
@@ -310,6 +428,7 @@
             user-select: none;
             color: #34495E;
             font-weight: 600;
+            transition: color 0.3s ease;
         }
 
         #tasksList li label input[type="checkbox"] {
@@ -366,6 +485,7 @@
             user-select: text;
             color: #34495E;
             text-align: center;
+            transition: color 0.3s ease;
         }
 
         #weekTasksList {
@@ -389,16 +509,51 @@
             align-items: center;
             user-select: none;
             font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode #weekTasksList li {
+            background: #29292E;
+            color: #E1E1E6;
         }
 
         #weekTasksList li .category-label {
             margin-left: 12px;
             font-size: 0.75rem;
         }
+
+        /* BOTÃO MODO ESCURO */
+        #darkModeToggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: transparent;
+            border: 2px solid #3498DB;
+            border-radius: 12px;
+            padding: 8px 18px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #3498DB;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            user-select: none;
+            z-index: 1000;
+        }
+
+        #darkModeToggle:hover,
+        #darkModeToggle:focus {
+            background: #3498DB;
+            color: white;
+            border-color: #2980B9;
+            outline: none;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Botão modo escuro -->
+    <button id="darkModeToggle" aria-label="Alternar modo escuro">Modo Escuro</button>
+
     <!-- PÁGINA MENU -->
     <section id="menuPage" role="main" aria-label="Menu principal">
         <h1>FocusMate</h1>
@@ -418,7 +573,7 @@
                 <select id="monthSelect" aria-label="Selecionar mês"></select>
                 <select id="yearSelect" aria-label="Selecionar ano"></select>
             </div>
-            <table class="calendar-table" role="grid" aria-label="Calendário mensal">
+            <table class="calendar-table" role="grid" aria-labelledby="calendarLabel" aria-live="polite">
                 <thead>
                     <tr>
                         <th scope="col">Dom</th>
@@ -434,49 +589,45 @@
             </table>
         </div>
 
-        <!-- Tarefas do dia -->
+        <!-- Dia -->
         <div id="dayView">
             <h2 id="dayTitle">Tarefas do Dia</h2>
-            <div id="taskCount">0 tarefas</div>
+            <p id="taskCount">0 tarefas</p>
             <div id="taskInputGroup">
-                <input type="text" id="taskInput" placeholder="Nova tarefa..." autocomplete="off"
-                    aria-label="Nova tarefa" />
-                <select id="categorySelect" aria-label="Selecione categoria">
-                    <option value="trabalho" selected>Trabalho</option>
+                <input type="text" id="taskInput" aria-label="Nova tarefa" placeholder="Nova tarefa..." />
+                <select id="categorySelect" aria-label="Categoria da tarefa">
+                    <option value="trabalho">Trabalho</option>
                     <option value="saude">Saúde</option>
                     <option value="academia">Academia</option>
                     <option value="compras">Compras</option>
                 </select>
                 <button id="addTaskBtn" aria-label="Adicionar tarefa">Adicionar</button>
             </div>
-            <ul id="tasksList"></ul>
+            <ul id="tasksList" aria-live="polite" aria-label="Lista de tarefas do dia"></ul>
         </div>
 
-        <!-- Tarefas da semana -->
+        <!-- Semana -->
         <div id="weekView">
             <h2>Tarefas da Semana</h2>
-            <ul id="weekTasksList"></ul>
+            <ul id="weekTasksList" aria-live="polite" aria-label="Lista de tarefas da semana"></ul>
         </div>
     </section>
 
     <script>
-        // Dados principais
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-        let selectedDate = new Date();
-
-        // Elementos DOM
+        // DOM references
         const menuPage = document.getElementById('menuPage');
         const app = document.getElementById('app');
+        const calendarView = document.getElementById('calendarView');
+        const dayView = document.getElementById('dayView');
+        const weekView = document.getElementById('weekView');
 
         const btnShowCalendar = document.getElementById('btnShowCalendar');
         const btnTodayTasks = document.getElementById('btnTodayTasks');
         const btnWeekTasks = document.getElementById('btnWeekTasks');
         const btnBackToMenu = document.getElementById('btnBackToMenu');
 
-        const calendarView = document.getElementById('calendarView');
-        const dayView = document.getElementById('dayView');
-        const weekView = document.getElementById('weekView');
-
+        const monthSelect = document.getElementById('monthSelect');
+        const yearSelect = document.getElementById('yearSelect');
         const calendarBody = document.getElementById('calendarBody');
 
         const dayTitle = document.getElementById('dayTitle');
@@ -485,126 +636,76 @@
         const categorySelect = document.getElementById('categorySelect');
         const addTaskBtn = document.getElementById('addTaskBtn');
         const tasksList = document.getElementById('tasksList');
+
         const weekTasksList = document.getElementById('weekTasksList');
 
-        const monthSelect = document.getElementById('monthSelect');
-        const yearSelect = document.getElementById('yearSelect');
+        // Estado
+        let selectedDate = new Date();
+        let tasks = JSON.parse(localStorage.getItem('tasks') || '{}');
 
-        // --- FUNÇÕES DE NAVEGAÇÃO ---
+        // Funções para mostrar views
         function showMenu() {
-            menuPage.style.display = 'flex';
             app.style.display = 'none';
-            hideAllAppViews();
+            menuPage.style.display = 'flex';
+            hideAllViews();
         }
 
         function showAppView(view) {
             menuPage.style.display = 'none';
             app.style.display = 'block';
-            hideAllAppViews();
+            hideAllViews();
             view.style.display = 'block';
         }
 
-        function hideAllAppViews() {
+        function hideAllViews() {
             calendarView.style.display = 'none';
             dayView.style.display = 'none';
             weekView.style.display = 'none';
         }
 
-        btnBackToMenu.addEventListener('click', () => {
-            showMenu();
-        });
-
-        btnShowCalendar.addEventListener('click', () => {
-            selectedDate = new Date();
-            updateMonthYearSelectors(selectedDate);
-            showAppView(calendarView);
-            renderCalendar(selectedDate);
-        });
-
-        btnTodayTasks.addEventListener('click', () => {
-            selectedDate = new Date();
-            showAppView(dayView);
-            updateDayView();
-        });
-
-        btnWeekTasks.addEventListener('click', () => {
-            showAppView(weekView);
-            renderWeekTasks();
-        });
-
-        // --- RENDERIZAR SELECTS DE MÊS E ANO ---
-        function updateMonthYearSelectors(date) {
-            const currentYear = new Date().getFullYear();
-
-            // Preencher meses
-            const monthNames = [
-                'Janeiro', 'Fevereiro', 'Março', 'Abril',
-                'Maio', 'Junho', 'Julho', 'Agosto',
-                'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        // Preenche os selects de mês e ano
+        function populateMonthYearSelectors() {
+            const months = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
             ];
 
-            if (monthSelect.options.length === 0) {
-                monthNames.forEach((name, index) => {
-                    const option = document.createElement('option');
-                    option.value = index;
-                    option.textContent = name;
-                    monthSelect.appendChild(option);
-                });
-            }
-            monthSelect.value = date.getMonth();
+            monthSelect.innerHTML = '';
+            months.forEach((m, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = m;
+                monthSelect.appendChild(option);
+            });
 
-            // Preencher anos (5 anos antes e depois do atual)
-            if (yearSelect.options.length === 0) {
-                for (let y = currentYear - 5; y <= currentYear + 5; y++) {
-                    const option = document.createElement('option');
-                    option.value = y;
-                    option.textContent = y;
-                    yearSelect.appendChild(option);
-                }
+            yearSelect.innerHTML = '';
+            const currentYear = new Date().getFullYear();
+            for (let y = currentYear - 10; y <= currentYear + 10; y++) {
+                const option = document.createElement('option');
+                option.value = y;
+                option.textContent = y;
+                yearSelect.appendChild(option);
             }
-            yearSelect.value = date.getFullYear();
         }
 
-        // Atualizar calendário ao mudar seleção
-        monthSelect.addEventListener('change', () => {
-            const year = parseInt(yearSelect.value);
-            const month = parseInt(monthSelect.value);
-            selectedDate = new Date(year, month, 1);
-            renderCalendar(selectedDate);
-        });
-
-        yearSelect.addEventListener('change', () => {
-            const year = parseInt(yearSelect.value);
-            const month = parseInt(monthSelect.value);
-            selectedDate = new Date(year, month, 1);
-            renderCalendar(selectedDate);
-        });
-
-        // --- RENDERIZAR CALENDÁRIO ---
+        // Renderizar calendário
         function renderCalendar(date) {
             calendarBody.innerHTML = '';
             const year = date.getFullYear();
             const month = date.getMonth();
 
-            // Primeiro dia do mês (índice do dia da semana)
             const firstDay = new Date(year, month, 1).getDay();
-
-            // Número de dias no mês
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            // Contador de dias
             let dayCounter = 1;
 
-            // Criar linhas da tabela para as semanas (máximo 6)
             for (let week = 0; week < 6; week++) {
                 const tr = document.createElement('tr');
                 let emptyWeek = true;
 
-                // Criar colunas para cada dia da semana
                 for (let day = 0; day < 7; day++) {
                     const td = document.createElement('td');
 
-                    // Preencher células antes do primeiro dia do mês e depois do último dia
                     if (week === 0 && day < firstDay) {
                         td.classList.add('inactive');
                         td.textContent = '';
@@ -615,7 +716,7 @@
                         emptyWeek = false;
                         td.textContent = dayCounter;
 
-                        // Destacar o dia atual
+                        // Destaque para hoje
                         const today = new Date();
                         if (
                             dayCounter === today.getDate() &&
@@ -625,7 +726,6 @@
                             td.classList.add('today');
                         }
 
-                        // Ao clicar, seleciona o dia e abre a view de tarefas do dia
                         td.style.cursor = 'pointer';
                         td.addEventListener('click', () => {
                             selectedDate = new Date(year, month, dayCounter);
@@ -639,12 +739,12 @@
                     tr.appendChild(td);
                 }
 
-                if (emptyWeek) break; // Para evitar semanas vazias
+                if (emptyWeek) break;
                 calendarBody.appendChild(tr);
             }
         }
 
-        // --- FORMATAÇÃO DE DATAS ---
+        // Atualiza a view do dia
         function formatDateISO(date) {
             const yyyy = date.getFullYear();
             const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -661,10 +761,8 @@
             });
         }
 
-        // --- ATUALIZAR VIEW DO DIA ---
         function updateDayView() {
             dayTitle.textContent = `Tarefas de ${formatDateBR(selectedDate)}`;
-
             const dateKey = formatDateISO(selectedDate);
             const dayTasks = tasks[dateKey] || [];
 
@@ -719,7 +817,7 @@
             });
         }
 
-        // --- ADICIONAR TAREFA ---
+        // Adicionar tarefa
         addTaskBtn.addEventListener('click', () => {
             const text = taskInput.value.trim();
             const category = categorySelect.value;
@@ -739,19 +837,18 @@
             updateDayView();
         });
 
-        // --- SALVAR TAREFAS NO LOCALSTORAGE ---
+        // Salvar no localStorage
         function saveTasks() {
             localStorage.setItem('tasks', JSON.stringify(tasks));
         }
 
-        // --- TAREFAS DA SEMANA ---
+        // Renderizar tarefas da semana
         function renderWeekTasks() {
             weekTasksList.innerHTML = '';
 
             const now = new Date();
             const startOfWeek = new Date(now);
-            // Ajustar para domingo anterior
-            startOfWeek.setDate(now.getDate() - now.getDay());
+            startOfWeek.setDate(now.getDate() - now.getDay()); // domingo anterior
 
             for (let i = 0; i < 7; i++) {
                 const day = new Date(startOfWeek);
@@ -781,8 +878,62 @@
             }
         }
 
-        // --- INICIALIZAÇÃO ---
-        showMenu();
+        // Inicialização dos selects e views
+        function initialize() {
+            populateMonthYearSelectors();
+
+            // Definir selects para o mês e ano atuais
+            monthSelect.value = selectedDate.getMonth();
+            yearSelect.value = selectedDate.getFullYear();
+
+            renderCalendar(selectedDate);
+
+            // Eventos para atualizar calendário quando mudar mês/ano
+            monthSelect.addEventListener('change', () => {
+                selectedDate = new Date(parseInt(yearSelect.value), parseInt(monthSelect.value), 1);
+                renderCalendar(selectedDate);
+            });
+
+            yearSelect.addEventListener('change', () => {
+                selectedDate = new Date(parseInt(yearSelect.value), parseInt(monthSelect.value), 1);
+                renderCalendar(selectedDate);
+            });
+
+            // Botões menu
+            btnShowCalendar.addEventListener('click', () => {
+                showAppView(calendarView);
+                renderCalendar(selectedDate);
+            });
+
+            btnTodayTasks.addEventListener('click', () => {
+                showAppView(dayView);
+                updateDayView();
+            });
+
+            btnWeekTasks.addEventListener('click', () => {
+                showAppView(weekView);
+                renderWeekTasks();
+            });
+
+            btnBackToMenu.addEventListener('click', () => {
+                showMenu();
+            });
+
+            // Modo escuro
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    darkModeToggle.textContent = 'Modo Claro';
+                } else {
+                    darkModeToggle.textContent = 'Modo Escuro';
+                }
+            });
+
+            showMenu();
+        }
+
+        window.onload = initialize;
     </script>
 </body>
 
